@@ -1,0 +1,15 @@
+{
+	"fixed": {
+		"file_version": "1.0.0"
+	},
+	"info": {
+		"0409": {
+			"ProductVersion": "1.0.0",
+			"CompanyName": "Marcusdeks",
+			"FileDescription": "FamiGP: Guitar Pro a chiptune",
+			"LegalCopyright": "© 2026 Marcusdeks",
+			"ProductName": "FamiGP",
+			"Comments": "Convierte partituras de Guitar Pro en música de 8 y 16 bits"
+		}
+	}
+}

@@ -1,0 +1,16 @@
+# Binarios (anclado a la raíz para no ignorar cmd/famigp/)
+/famigp
+*.exe
+/tmp/
+appDesktop/bin/
+
+# Frontend: dependencias e interfaz compilada (dist/.gitkeep sí se versiona)
+web/node_modules/
+web/dist/app/
+
+# Notas personales que no forman parte del proyecto
+/descripciones, ignorar en los comits de git.txt
+
+# Audio generado durante las pruebas manuales
+*.wav
+*.mid

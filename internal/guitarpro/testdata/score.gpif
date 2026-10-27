@@ -1,0 +1,62 @@
+<GPIF>
+  <Score><Title>Prueba</Title><Artist>FamiGP</Artist></Score>
+  <MasterTrack>
+    <Automations>
+      <Automation><Type>Tempo</Type><Bar>0</Bar><Position>0</Position><Value>90 2</Value></Automation>
+    </Automations>
+  </MasterTrack>
+  <Tracks>
+    <Track id="0">
+      <Name>Guitarra</Name>
+      <Staves><Staff><Properties>
+        <Property name="Tuning"><Pitches>40 45 50 55 59 64</Pitches></Property>
+      </Properties></Staff></Staves>
+    </Track>
+    <Track id="1">
+      <Name>Batería</Name>
+      <InstrumentSet>
+        <Type>drumKit</Type>
+        <Elements><Element><Articulations>
+          <Articulation><OutputMidiNumber>36</OutputMidiNumber></Articulation>
+          <Articulation><OutputMidiNumber>38</OutputMidiNumber></Articulation>
+        </Articulations></Element></Elements>
+      </InstrumentSet>
+    </Track>
+  </Tracks>
+  <MasterBars>
+    <MasterBar><Time>4/4</Time><Bars>0 2</Bars></MasterBar>
+    <MasterBar><Time>4/4</Time><Bars>1 2</Bars></MasterBar>
+  </MasterBars>
+  <Bars>
+    <Bar id="0"><Voices>0 -1 -1 -1</Voices></Bar>
+    <Bar id="1"><Voices>1 -1 -1 -1</Voices></Bar>
+    <Bar id="2"><Voices>2 -1 -1 -1</Voices></Bar>
+  </Bars>
+  <Voices>
+    <Voice id="0"><Beats>0</Beats></Voice>
+    <Voice id="1"><Beats>1</Beats></Voice>
+    <Voice id="2"><Beats>2 3</Beats></Voice>
+  </Voices>
+  <Beats>
+    <Beat id="0"><Dynamic>MF</Dynamic><Rhythm ref="0"/><Notes>0</Notes></Beat>
+    <Beat id="1"><Rhythm ref="0"/><Notes>1</Notes></Beat>
+    <Beat id="2"><Rhythm ref="1"/><Notes>2</Notes></Beat>
+    <Beat id="3"><Rhythm ref="1"/><Notes>3</Notes></Beat>
+  </Beats>
+  <Notes>
+    <Note id="0"><Properties>
+      <Property name="String"><String>5</String></Property>
+      <Property name="Fret"><Fret>3</Fret></Property>
+    </Properties></Note>
+    <Note id="1"><Tie origin="false" destination="true"/><Properties>
+      <Property name="String"><String>5</String></Property>
+      <Property name="Fret"><Fret>3</Fret></Property>
+    </Properties></Note>
+    <Note id="2"><InstrumentArticulation>0</InstrumentArticulation></Note>
+    <Note id="3"><InstrumentArticulation>1</InstrumentArticulation></Note>
+  </Notes>
+  <Rhythms>
+    <Rhythm id="0"><NoteValue>Whole</NoteValue></Rhythm>
+    <Rhythm id="1"><NoteValue>Half</NoteValue></Rhythm>
+  </Rhythms>
+</GPIF>

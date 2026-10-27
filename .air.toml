@@ -1,0 +1,16 @@
+# Recarga en caliente del servidor Go durante el desarrollo: Air recompila y
+# reinicia el servidor al guardar cualquier archivo .go. En este modo la API
+# escucha en el puerto 8081 y la interfaz la sirve Vite en el 8080
+# (`npm run dev` en web/), que reenvía las llamadas a /api.
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/famigp.exe ./cmd/famigp"
+bin = "./tmp/famigp.exe"
+args_bin = ["-addr", "localhost:8081"]
+include_ext = ["go"]
+exclude_dir = ["web", "tmp", "appDesktop"]
+
+[misc]
+clean_on_exit = true

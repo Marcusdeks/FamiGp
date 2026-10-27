@@ -1,0 +1,9 @@
+.git
+.github
+tmp
+appDesktop
+web/node_modules
+web/dist/app
+*.exe
+*.wav
+*.mid

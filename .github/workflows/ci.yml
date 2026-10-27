@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Formato
+        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+
+      - name: Análisis estático
+        run: go vet ./...
+
+      - name: Tests con detector de condiciones de carrera
+        run: go test -race ./...
+
+      - name: Fuzzing del lector de Guitar Pro
+        run: go test ./internal/guitarpro -run '^$' -fuzz FuzzParse -fuzztime 30s
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests
+        run: npm test
+
+      - name: Comprobación de tipos y compilación
+        run: npm run build
+
+  desktop:
+    runs-on: windows-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: appDesktop/go.mod
+          cache-dependency-path: appDesktop/go.sum
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Compilar la aplicación de escritorio
+        shell: pwsh
+        run: ./appDesktop/build.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamiGP-windows
+          path: appDesktop/bin/FamiGP.exe
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen
+        run: docker build -t famigp .

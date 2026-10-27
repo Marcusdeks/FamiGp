@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* Paleta inspirada en la Famicom: fondo nocturno, rojo, oro y cian. */
+@theme {
+  --color-night: #0e0b1f;
+  --color-panel: #19153a;
+  --color-line: #3a3370;
+  --color-ink: #f1ecff;
+  --color-muted: #a9a2d6;
+  --color-famired: #e4304c;
+  --color-gold: #f8b800;
+  --color-cyan: #3cbcfc;
+  --font-pixel: "Press Start 2P", ui-monospace, monospace;
+  --shadow-pixel: 6px 6px 0 #000;
+  --shadow-pixel-sm: 3px 3px 0 #000;
+}
+
+@layer base {
+  body {
+    @apply min-h-screen bg-night text-ink;
+  }
+
+  /* Líneas de barrido de monitor CRT, puramente decorativas. */
+  body::before {
+    content: "";
+    @apply pointer-events-none fixed inset-0 z-50;
+    background: repeating-linear-gradient(transparent 0 2px, rgb(0 0 0 / 0.18) 2px 4px);
+  }
+
+  select {
+    @apply min-w-0 border-3 border-line bg-night px-2 py-1.5 text-sm text-ink;
+  }
+}
+
+/* Botón pixelado común a toda la interfaz. */
+@layer components {
+  .btn {
+    @apply cursor-pointer border-3 border-line bg-night px-3.5 py-2.5 font-pixel text-[10px] text-ink shadow-pixel-sm;
+  }
+
+  .btn:hover:not(:disabled) {
+    @apply border-cyan;
+  }
+
+  .btn:active:not(:disabled) {
+    @apply translate-x-[3px] translate-y-[3px] shadow-none;
+  }
+
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-40;
+  }
+}
