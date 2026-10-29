@@ -29,7 +29,7 @@ FamiStudio no puede abrir archivos de Guitar Pro. FamiGP lee la partitura, la re
 - **Arpegios automáticos**: como en el hardware original, cada canal es monofónico; los acordes se alternan a la frecuencia de refresco del chip.
 - **Percusión con ruido LFSR**: bombo, caja, charles y platos se imitan con el generador de ruido de la NES, con cuerpo tonal en bombo y toms.
 - **Reproductor con barra de vida**: escucha la canción completa o solo el canal que editas. El progreso y el volumen se muestran como barras de vida; al pasar el ratón se ve el segundo exacto al que se saltará. Cualquier cambio detiene el audio, que ya no corresponde a lo editado.
-- **Exportación** a WAV y a MIDI para FamiStudio.
+- **Exportación** a WAV, MP3 y MIDI para FamiStudio. El MP3 se codifica en el propio navegador, en un Web Worker, para no congelar la interfaz.
 
 ## Tecnologías
 
@@ -112,7 +112,7 @@ internal/server/     API REST sin estado y validación de proyectos
 web/                 Interfaz React + TypeScript; su compilación se incrusta en el binario
   src/components/    Componentes de la interfaz (proyectos, chips, canales, editor, reproductor)
   src/hooks/         Estado: proyectos con deshacer, audio y tareas asíncronas
-  src/lib/           Lógica sin React: piano roll sobre canvas, corte de tramos, API, IndexedDB, tiempos
+  src/lib/           Lógica sin React: piano roll sobre canvas, corte de tramos, MP3, API, IndexedDB, tiempos
 ```
 
 El piano roll es una clase imperativa sobre Canvas que React controla mediante un componente envoltorio: dibuja solo la zona visible y entrega un array nuevo de notas al terminar cada gesto, sin mutar el estado de React. El historial de deshacer guarda instantáneas inmutables de las líneas, que comparten por referencia las partes que no cambian.
@@ -157,7 +157,7 @@ go test ./internal/guitarpro -run '^$' -fuzz FuzzParse -fuzztime 60s
 
 cd web
 npm run lint   # ESLint, incluidas las reglas de hooks de React
-npm test       # Vitest: lógica de proyectos, historial, cortes y tiempos
+npm test       # Vitest: lógica de proyectos, historial, cortes, MP3 y tiempos
 npm run build  # comprobación de tipos de TypeScript y compilación
 ```
 
@@ -176,4 +176,6 @@ npm run build  # comprobación de tipos de TypeScript y compilación
 
 ## Aviso legal
 
-FamiGP es un proyecto independiente sin relación con Arobas Music (Guitar Pro), FamiStudio, Nintendo, Commodore, Yamaha, Namco ni ninguna otra empresa mencionada. Sus nombres y marcas se citan únicamente para indicar compatibilidad. El lector de Guitar Pro es una implementación propia para la interoperabilidad de formatos y el sonido de los chips se sintetiza desde cero: el proyecto no incluye código, muestras de audio ni archivos de terceros. El uso de partituras protegidas por derechos de autor es responsabilidad de quien las convierte.
+FamiGP es un proyecto independiente sin relación con Arobas Music (Guitar Pro), FamiStudio, Nintendo, Commodore, Yamaha, Namco ni ninguna otra empresa mencionada. Sus nombres y marcas se citan únicamente para indicar compatibilidad. El lector de Guitar Pro es una implementación propia para la interoperabilidad de formatos y el sonido de los chips se sintetiza desde cero: el proyecto no incluye muestras de audio ni archivos de terceros. El uso de partituras protegidas por derechos de autor es responsabilidad de quien las convierte.
+
+La exportación a MP3 usa [lamejs](https://github.com/shijinyu/lamejs), una versión en JavaScript del codificador LAME distribuida bajo licencia LGPL-3.0. Se incluye sin modificar como dependencia de npm, en un archivo propio que el navegador solo descarga al exportar.

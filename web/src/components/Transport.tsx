@@ -16,6 +16,7 @@ interface Props {
   onVolume(volume: number): void;
   onToggleSound(): void;
   onWAV(): void;
+  onMP3(): void;
   onMIDI(): void;
 }
 
@@ -40,7 +41,7 @@ function usePlayback(player: RefObject<HTMLAudioElement | null>) {
 // progreso y el volumen se muestran como barras de vida. Parar nunca se
 // deshabilita: la reproducción debe poder detenerse en todo momento.
 export function Transport(props: Props) {
-  const { player, busy, loaded, outdated, channelName, onToggle, onStop, onSeek, onVolume, onToggleSound, onWAV, onMIDI } = props;
+  const { player, busy, loaded, outdated, channelName, onToggle, onStop, onSeek, onVolume, onToggleSound, onWAV, onMP3, onMIDI } = props;
   const { time, duration, paused, volume, muted } = usePlayback(player);
   const playing = (mode: PlayMode) => loaded === mode && !paused;
   const silent = muted || volume === 0;
@@ -104,6 +105,9 @@ export function Transport(props: Props) {
           <div className="flex gap-2">
             <button type="button" className="btn" disabled={busy} onClick={onWAV}>
               WAV
+            </button>
+            <button type="button" className="btn" disabled={busy} onClick={onMP3}>
+              MP3
             </button>
             <button type="button" className="btn" disabled={busy} title="En FamiStudio: File → Import → MIDI" onClick={onMIDI}>
               MIDI FamiStudio

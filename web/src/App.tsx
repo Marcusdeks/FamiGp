@@ -10,6 +10,7 @@ import { useProjects } from './hooks/useProjects';
 import { useTask } from './hooks/useTask';
 import { exportMIDI, getPresets } from './lib/api';
 import { cutProject } from './lib/cut';
+import { encodeMp3 } from './lib/encodeMp3';
 import type { RollView } from './lib/pianoRoll';
 import { previewNote } from './lib/preview';
 import { CHANNEL_COLORS, newLine, replaceLine, toPayload } from './lib/project';
@@ -79,7 +80,8 @@ export function App() {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  const fileName = (extension: string) => `${active?.name} (${preset?.name}).${extension}`;
+  // Nombre de descarga, sin los caracteres que Windows no admite en archivos ("NES / Famicom" → "NES - Famicom").
+  const fileName = (extension: string) => `${active?.name} (${preset?.name})`.replace(/\s*[\\/:*?"<>|]\s*/g, ' - ') + `.${extension}`;
 
   function addFiles(files: File[]) {
     if (preset) run('Leyendo partituras…', () => projects.add(files, preset));
@@ -115,6 +117,13 @@ export function App() {
   };
 
   const togglePlayback = (mode: PlayMode) => run('Sintetizando…', () => audio.toggle(mode));
+
+  // Ofrece un archivo para descargar y libera su URL cuando el navegador ya la ha usado.
+  const save = (blob: Blob, extension: string) => {
+    const url = URL.createObjectURL(blob);
+    download(url, fileName(extension));
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  };
 
   return (
     <>
@@ -185,14 +194,13 @@ export function App() {
           onVolume={audio.setVolume}
           onToggleSound={audio.toggleSound}
           onWAV={() => run('Sintetizando…', async () => download(await audio.audioURL('song'), fileName('wav')))}
-          onMIDI={() =>
-            run('Generando MIDI…', async () => {
-              const url = URL.createObjectURL(await exportMIDI(songPayload));
-              download(url, fileName('mid'));
-              // Margen para que el navegador empiece la descarga antes de liberar la URL.
-              setTimeout(() => URL.revokeObjectURL(url), 10_000);
+          onMP3={() =>
+            run('Generando MP3…', async () => {
+              const wav = await (await fetch(await audio.audioURL('song'))).blob();
+              save(await encodeMp3(wav), 'mp3');
             })
           }
+          onMIDI={() => run('Generando MIDI…', async () => save(await exportMIDI(songPayload), 'mid'))}
         />
       )}
     </>
